@@ -32,6 +32,9 @@
     <button v-if="tasks.some((task) => task.done)" @click="clearCompleted()">
       Clear completed tasks
     </button>
+    <div>Tasks count: {{ tasks.length }}</div>
+    <div>Tasks completed: {{ tasks.filter((task) => task.done).length }}</div>
+    <div>Tasks left to do: {{ tasks.filter((task) => !task.done).length }}</div>
   </div>
 </template>
 
@@ -91,6 +94,10 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
+* {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
 .done {
   text-decoration: line-through;
 }
