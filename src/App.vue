@@ -13,6 +13,9 @@
         <button @click="removeTask(task.id)">X</button>
       </li>
     </ul>
+    <button v-if="tasks.some((task) => task.done)" @click="clearCompleted()">
+      Clear completed tasks
+    </button>
   </div>
 </template>
 
@@ -31,6 +34,10 @@ const addTask = () => {
 
 const removeTask = (id) => {
   tasks.value = tasks.value.filter((task) => task.id !== id)
+}
+
+const clearCompleted = () => {
+  tasks.value = tasks.value.filter((task) => !task.done)
 }
 
 // Save tasks in LocalStorage on changes
