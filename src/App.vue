@@ -1,5 +1,7 @@
 <template>
-  <div class="">
+  <div>
+    <label for="darkmode-switch">Dark mode</label>
+    <input v-model="darkMode" type="checkbox" name="darkmode" id="darkmode-switch" />
     <h1>Todo App</h1>
     <div>Create a new task</div>
     <input type="text" v-model="newTaskText" @keyup.enter="addTask" placeholder="Add a new task" />
@@ -43,6 +45,13 @@ import { onMounted, ref, watch } from 'vue'
 
 const tasks = ref([])
 const newTaskText = ref('')
+const darkMode = ref()
+
+// Make dark mode changes persistent in localStorage
+watch(darkMode, (darkMode) => {
+  localStorage.setItem('darkMode', darkMode ? 'true' : 'false')
+  document.body.classList.toggle('dark-mode', darkMode)
+})
 
 const addTask = () => {
   const trimmedText = newTaskText.value.trim()
@@ -81,12 +90,16 @@ watch(
 
 onMounted(() => {
   try {
+    // Get saved todos from localStorage
     const savedTodos = JSON.parse(localStorage.getItem('todos'))
     if (Array.isArray(savedTodos)) {
       // Set all isEditing values to false
       savedTodos.forEach((todo) => (todo.isEditing = false))
       tasks.value = savedTodos
     }
+
+    // Init dark mode base on settings in the localStorage
+    darkMode.value = localStorage.getItem('darkMode') === 'true'
   } catch (err) {
     console.error('Error thrown: ', err)
   }
@@ -100,5 +113,17 @@ onMounted(() => {
 
 .done {
   text-decoration: line-through;
+}
+
+.dark-mode {
+  color: rgb(213, 194, 158);
+  background-color: rgb(31, 65, 65);
+
+  button {
+    background-color: #cee645;
+  }
+  input {
+    background-color: #b8f0b0;
+  }
 }
 </style>
