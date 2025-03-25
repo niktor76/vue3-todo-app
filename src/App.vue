@@ -10,25 +10,13 @@
     <div>Tasks</div>
     <ul>
       <li v-for="task in tasks" :key="task.id">
-        <input type="checkbox" name="done" v-model="task.done" />
-        <span v-if="!task.isEditing" :class="{ done: task.done }" @click="task.isEditing = true">{{
-          task.text
-        }}</span>
-        <input
-          v-else
-          @keyup.enter="updateText(task, $event)"
-          @blur="task.isEditing = false"
-          type="text"
-          name="editing-text"
-          :value="task.text"
-          :ref="
-            (el) => {
-              if (el) el.focus()
-            }
-          "
+        <TaskItem
+          :task="task"
+          @done="done"
+          @update-text="updateText"
+          @remove-task="removeTask"
+          @is-editing="toggleEditing"
         />
-
-        <button @click="removeTask(task.id)">X</button>
       </li>
     </ul>
     <button v-if="tasks.some((task) => task.done)" @click="clearCompleted()">
@@ -42,6 +30,7 @@
 
 <script setup>
 import { onMounted, ref, watch } from 'vue'
+import TaskItem from './TaskItem.vue'
 
 const tasks = ref([])
 const newTaskText = ref('')
@@ -65,18 +54,9 @@ const addTask = () => {
   newTaskText.value = ''
 }
 
-const removeTask = (id) => {
-  tasks.value = tasks.value.filter((task) => task.id !== id)
-}
-
 // Remove all done tasks from the list
 const clearCompleted = () => {
   tasks.value = tasks.value.filter((task) => !task.done)
-}
-
-const updateText = (task, evt) => {
-  task.text = evt.target.value
-  task.isEditing = false
 }
 
 // Save tasks in LocalStorage on changes
@@ -87,6 +67,25 @@ watch(
   },
   { deep: true },
 )
+
+const done = (taskId, done) => {
+  tasks.value.find((task) => task.id === taskId).done = done
+}
+
+const updateText = (taskId, newText) => {
+  const task = tasks.value.find((task) => task.id === taskId)
+  task.text = newText
+  task.isEditing = false
+}
+
+const toggleEditing = (taskId, isEditing) => {
+  const task = tasks.value.find((task) => task.id === taskId)
+  task.isEditing = isEditing
+}
+
+const removeTask = (id) => {
+  tasks.value = tasks.value.filter((task) => task.id !== id)
+}
 
 onMounted(() => {
   try {
