@@ -3,9 +3,7 @@
     <label for="darkmode-switch">Dark mode</label>
     <input v-model="darkMode" type="checkbox" name="darkmode" id="darkmode-switch" />
     <h1>Todo App</h1>
-    <div>Create a new task</div>
-    <input type="text" v-model="newTaskText" @keyup.enter="addTask" placeholder="Add a new task" />
-    <button @click="addTask">+</button>
+    <TaskInput v-model="newTaskText" @add-task="addTask" />
 
     <div>Tasks</div>
     <ul>
@@ -31,6 +29,7 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import TaskItem from './TaskItem.vue'
+import TaskInput from './TaskInput.vue'
 
 const tasks = ref([])
 const newTaskText = ref('')
@@ -45,6 +44,7 @@ watch(darkMode, (darkMode) => {
 const addTask = () => {
   const trimmedText = newTaskText.value.trim()
   if (!trimmedText) return
+
   tasks.value.push({
     id: Date.now(),
     text: trimmedText,
