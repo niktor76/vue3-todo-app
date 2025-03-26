@@ -9,13 +9,13 @@
     <span
       v-if="!task.isEditing"
       :class="{ done: task.done }"
-      @click="emit('is-editing', task.id, true)"
+      @click="emit('edit-start', task.id)"
       >{{ task.text }}</span
     >
     <input
       v-else
       @keyup.enter="emit('update-text', task.id, $event.target.value)"
-      @blur="emit('is-editing', task.id, false)"
+      @blur="emit('edit-stop', task.id)"
       type="text"
       name="editing-text"
       :value="task.text"
@@ -34,7 +34,7 @@ const props = defineProps({
   task: Object,
 })
 
-const emit = defineEmits(['done', 'update-text', 'is-editing', 'remove-task'])
+const emit = defineEmits(['done', 'update-text', 'edit-start', 'edit-stop', 'remove-task'])
 </script>
 
 <style lang="scss"></style>

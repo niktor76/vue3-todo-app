@@ -13,7 +13,8 @@
           @done="done"
           @update-text="updateText"
           @remove-task="removeTask"
-          @is-editing="toggleEditing"
+          @edit-start="startEditingTaskLabel"
+          @edit-stop="stopEditingTaskLabel"
         />
       </li>
     </ul>
@@ -81,6 +82,16 @@ const updateText = (taskId, newText) => {
 const toggleEditing = (taskId, isEditing) => {
   const task = tasks.value.find((task) => task.id === taskId)
   task.isEditing = isEditing
+}
+
+const startEditingTaskLabel = (taskId) => {
+  const task = tasks.value.find((task) => task.id === taskId)
+  task.isEditing = true
+}
+
+const stopEditingTaskLabel = (taskId) => {
+  const task = tasks.value.find((task) => task.id === taskId)
+  task.isEditing = false
 }
 
 const removeTask = (id) => {
