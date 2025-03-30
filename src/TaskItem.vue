@@ -5,6 +5,7 @@
       name="done"
       @change="emit('done', task.id, !task.done)"
       :checked="task.done"
+      :aria-label="`Mark ${task.text} as ${task.done ? 'not done' : 'done'}`"
     />
     <span
       v-if="!task.isEditing"
@@ -15,7 +16,7 @@
       @keyup.space="emit('edit-start', task.id)"
       tabindex="0"
       role="button"
-      aria-label="Edit task"
+      :aria-label="`Edit text of task ${task.text}`"
       >{{ task.text }}</span
     >
     <input
@@ -32,7 +33,9 @@
         }
       "
     />
-    <button @click="emit('remove-task', task.id)">X</button>
+    <button @click="emit('remove-task', task.id)" :aria-label="`Delete task ${task.text}`">
+      Delete
+    </button>
   </div>
 </template>
 
@@ -60,5 +63,10 @@ watch(
 :focus {
   outline: 2px dashed #cf19c6;
   outline-offset: 2px;
+}
+
+.sr-only {
+  visibility: none;
+  opacity: 0;
 }
 </style>
