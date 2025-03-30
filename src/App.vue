@@ -79,11 +79,6 @@ const updateText = (taskId, newText) => {
   task.isEditing = false
 }
 
-const toggleEditing = (taskId, isEditing) => {
-  const task = tasks.value.find((task) => task.id === taskId)
-  task.isEditing = isEditing
-}
-
 const startEditingTaskLabel = (taskId) => {
   const task = tasks.value.find((task) => task.id === taskId)
   task.isEditing = true
