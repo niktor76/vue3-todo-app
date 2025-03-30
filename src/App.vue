@@ -6,8 +6,20 @@
     <TaskInput v-model="newTaskText" @add-task="addTask" />
 
     <div>Tasks</div>
+    <button :class="{ 'is-selected': filterState === 'all' }" @click="filterState = 'all'">
+      All ({{ tasks.length }})
+    </button>
+    <button :class="{ 'is-selected': filterState === 'active' }" @click="filterState = 'active'">
+      Active ({{ tasks.filter((task) => !task.done).length }})
+    </button>
+    <button
+      :class="{ 'is-selected': filterState === 'completed' }"
+      @click="filterState = 'completed'"
+    >
+      Completed ({{ tasks.filter((task) => task.done).length }})
+    </button>
     <ul>
-      <li v-for="task in tasks" :key="task.id">
+      <li v-for="task in filteredTasks" :key="task.id">
         <TaskItem
           :task="task"
           @done="done"
@@ -21,25 +33,41 @@
     <button v-if="tasks.some((task) => task.done)" @click="clearCompleted()">
       Clear completed tasks
     </button>
-    <div>Tasks count: {{ tasks.length }}</div>
-    <div>Tasks completed: {{ tasks.filter((task) => task.done).length }}</div>
-    <div>Tasks left to do: {{ tasks.filter((task) => !task.done).length }}</div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+// TODO: Styling
+// TODO: Task filtering
+// TODO: Testing (Vitest)
+// TODO: Import/Export as JSON
+// TODO: Drag and Drop
+// TODO: Due dates/reminders
+
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import TaskItem from './TaskItem.vue'
 import TaskInput from './TaskInput.vue'
 
 const tasks = ref([])
 const newTaskText = ref('')
 const darkMode = ref()
+const filterState = ref('all')
 
 // Make dark mode changes persistent in localStorage
 watch(darkMode, (darkMode) => {
   localStorage.setItem('darkMode', darkMode ? 'true' : 'false')
   document.body.classList.toggle('dark-mode', darkMode)
+})
+
+// Filter logic
+const filteredTasks = computed(() => {
+  if (filterState.value === 'active') {
+    return tasks.value.filter((task) => !task.done)
+  } else if (filterState.value === 'completed') {
+    return tasks.value.filter((task) => task.done)
+  } else if (filterState.value === 'all') {
+    return tasks.value
+  }
 })
 
 const addTask = () => {
@@ -126,9 +154,16 @@ onMounted(() => {
 
   button {
     background-color: #cee645;
+    padding: 5px;
+    margin: 2px;
   }
   input {
     background-color: #b8f0b0;
+  }
+
+  .is-selected {
+    color: white;
+    background-color: blue;
   }
 }
 </style>
