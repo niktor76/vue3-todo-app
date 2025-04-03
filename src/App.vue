@@ -49,6 +49,7 @@
 // TODO: Import/Export as JSON
 // TODO: Drag and Drop
 // TODO: Due dates/reminders
+// TODO: Complete accessibility features
 
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import TaskItem from './TaskItem.vue'
