@@ -40,13 +40,15 @@
       Clear completed tasks
     </button>
   </div>
+  <div>
+    <h2>File Operations</h2>
+    <button class="export" @click="exportTasks()">Export Tasks</button>
+  </div>
   <div class="sr-only" aria-live="polite">{{ announcement }}</div>
 </template>
 
 <script setup>
 // TODO: Styling
-// TODO: Testing (Vitest)
-// TODO: Import/Export as JSON
 // TODO: Drag and Drop
 // TODO: Due dates/reminders
 // TODO: Complete accessibility features
@@ -133,6 +135,25 @@ const stopEditingTaskLabel = (taskId) => {
 const removeTask = (id) => {
   announcement.value = `Task ${tasks.value.find((t) => t.id)?.text} deleted.`
   tasks.value = tasks.value.filter((task) => task.id !== id)
+}
+
+// File Operations
+const exportTasks = () => {
+  const stringifiedTasks = JSON.stringify(tasks.value, null, 2)
+
+  // Create a Blob object
+  const blob = new Blob([stringifiedTasks], { type: 'application/json' })
+
+  // Create a download URL
+  const url = URL.createObjectURL(blob)
+
+  // Create hidden a element
+  const aElm = document.createElement('a')
+  aElm.href = url
+  const timestamp = new Date().toISOString().slice(0, 16).replace('T', '_').replace(':', '-')
+  aElm.download = `tasks_${timestamp}.json`
+  aElm.click()
+  URL.revokeObjectURL(url)
 }
 
 onMounted(() => {
