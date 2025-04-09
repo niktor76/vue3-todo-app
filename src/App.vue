@@ -56,9 +56,6 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import TaskItem from './components/TaskItem.vue'
 import TaskInput from './components/TaskInput.vue'
-import Card from './components/Card.vue'
-
-const titleAttrName = ref('title')
 
 const tasks = ref([])
 const newTaskText = ref('')
