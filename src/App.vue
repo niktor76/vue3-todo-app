@@ -40,10 +40,7 @@
       Clear completed tasks
     </button>
   </div>
-  <div>
-    <h2>File Operations</h2>
-    <button class="export" @click="exportTasks()">Export Tasks</button>
-  </div>
+  <FileModal @export-tasks="exportTasks()" />
   <div class="sr-only" aria-live="polite">{{ announcement }}</div>
 </template>
 
@@ -56,6 +53,7 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import TaskItem from './components/TaskItem.vue'
 import TaskInput from './components/TaskInput.vue'
+import FileModal from './components/FileModal.vue'
 
 const tasks = ref([])
 const newTaskText = ref('')
