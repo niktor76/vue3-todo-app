@@ -42,6 +42,7 @@
   </div>
   <button class="file-operations" @click="isFilesModalVisisble = true">File Operations</button>
   <FileModal
+    v-if="isFilesModalVisisble"
     @export-tasks="exportTasks()"
     @hide-modal="isFilesModalVisisble = false"
     :isVisible="isFilesModalVisisble"
@@ -65,7 +66,7 @@ const newTaskText = ref('')
 const darkMode = ref()
 const filterState = ref('all')
 const announcement = ref()
-const isFilesModalVisisble = ref(true)
+const isFilesModalVisisble = ref(false)
 
 // Make dark mode changes persistent in localStorage
 watch(darkMode, (darkMode) => {

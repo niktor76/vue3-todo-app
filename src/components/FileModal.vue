@@ -1,13 +1,11 @@
 <template>
   <Teleport to="body">
-    <div v-if="isVisible">
-      <div class="backdrop">
-        <div class="modal">
-          <button class="close" @click="emit('hide-modal')">Close</button>
-          <div>
-            <h2>File Operations</h2>
-            <button class="export" @click="emit('export-tasks')">Export Tasks</button>
-          </div>
+    <div class="backdrop" @click.self="emit('hide-modal')">
+      <div class="modal">
+        <button class="close" @click="emit('hide-modal')">Close</button>
+        <div>
+          <h2>File Operations</h2>
+          <button class="export" @click="emit('export-tasks')">Export Tasks</button>
         </div>
       </div>
     </div>
@@ -15,7 +13,7 @@
 </template>
 
 <script setup>
-import { watch } from 'vue'
+import { onMounted, onUnmounted, watch } from 'vue'
 
 const props = defineProps({
   isVisible: Boolean,
@@ -28,6 +26,21 @@ watch(
     document.body.style.overflow = visible ? 'hidden' : ''
   },
 )
+
+// Close modal on Escape key
+function closeModal(evt) {
+  if (evt.key === 'Escape') {
+    emit('hide-modal')
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keyup', closeModal)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keyup', closeModal)
+})
 </script>
 
 <style lang="scss">
