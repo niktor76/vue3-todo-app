@@ -40,7 +40,12 @@
       Clear completed tasks
     </button>
   </div>
-  <FileModal @export-tasks="exportTasks()" />
+  <button class="file-operations" @click="isFilesModalVisisble = true">File Operations</button>
+  <FileModal
+    @export-tasks="exportTasks()"
+    @hide-modal="isFilesModalVisisble = false"
+    :isVisible="isFilesModalVisisble"
+  />
   <div class="sr-only" aria-live="polite">{{ announcement }}</div>
 </template>
 
@@ -60,6 +65,7 @@ const newTaskText = ref('')
 const darkMode = ref()
 const filterState = ref('all')
 const announcement = ref()
+const isFilesModalVisisble = ref(true)
 
 // Make dark mode changes persistent in localStorage
 watch(darkMode, (darkMode) => {
