@@ -5,6 +5,15 @@
         <button class="close" @click="emit('hide-modal')">Close</button>
         <div>
           <h2>File Operations</h2>
+          <button class="import" @click="importTasksInput?.click()">Import Tasks</button>
+          <input
+            v-show="false"
+            ref="import-tasks-input"
+            type="file"
+            id="importTasks"
+            accept=".json"
+            @change="emit('import-tasks', $event)"
+          />
           <button class="export" @click="emit('export-tasks')">Export Tasks</button>
         </div>
       </div>
@@ -13,12 +22,14 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, watch } from 'vue'
+import { onMounted, onUnmounted, watch, useTemplateRef } from 'vue'
 
 const props = defineProps({
   isVisible: Boolean,
 })
-const emit = defineEmits(['export-tasks', 'hide-modal'])
+const emit = defineEmits(['export-tasks', 'import-tasks', 'hide-modal'])
+
+const importTasksInput = useTemplateRef('import-tasks-input')
 
 watch(
   () => props.isVisible,

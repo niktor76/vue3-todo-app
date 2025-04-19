@@ -40,12 +40,13 @@
       Clear completed tasks
     </button>
   </div>
-  <button class="file-operations" @click="isFilesModalVisisble = true">File Operations</button>
+  <button class="file-operations" @click="isFilesModalVisible = true">File Operations</button>
   <FileModal
-    v-if="isFilesModalVisisble"
-    @export-tasks="exportTasks()"
-    @hide-modal="isFilesModalVisisble = false"
-    :isVisible="isFilesModalVisisble"
+    v-if="isFilesModalVisible"
+    @export-tasks="exportTasks"
+    @import-tasks="importTasks"
+    @hide-modal="isFilesModalVisible = false"
+    :isVisible="isFilesModalVisible"
   />
   <div class="sr-only" aria-live="polite">{{ announcement }}</div>
 </template>
@@ -56,7 +57,9 @@
 // TODO: Due dates/reminders
 // TODO: Complete accessibility features
 
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+
+// Components
 import TaskItem from './components/TaskItem.vue'
 import TaskInput from './components/TaskInput.vue'
 import FileModal from './components/FileModal.vue'
@@ -66,7 +69,7 @@ const newTaskText = ref('')
 const darkMode = ref()
 const filterState = ref('all')
 const announcement = ref()
-const isFilesModalVisisble = ref(false)
+const isFilesModalVisible = ref(false)
 
 // Make dark mode changes persistent in localStorage
 watch(darkMode, (darkMode) => {
@@ -159,6 +162,41 @@ const exportTasks = () => {
   aElm.download = `tasks_${timestamp}.json`
   aElm.click()
   URL.revokeObjectURL(url)
+}
+
+const importTasks = async (event) => {
+  // Read file
+  const file = event.target?.files?.[0]
+  if (!file) return
+
+  try {
+    // Convert file to string
+    const json = await file.text()
+
+    // Parse JSON
+    const data = JSON.parse(json)
+
+    // Validate Data
+    if (!Array.isArray(data)) throw new Error('Inavalid data: not an array.')
+    const validTasks = data.every(
+      (task) =>
+        typeof task === 'object' &&
+        typeof task.id === 'number' &&
+        typeof task.text === 'string' &&
+        typeof task.done === 'boolean',
+    )
+    if (!validTasks) throw new Error('Invalid data: Invalid task format')
+
+    // Write to tasks
+    tasks.value = data.map((task) => {
+      return {
+        ...task,
+        isEditing: false,
+      }
+    })
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 onMounted(() => {
