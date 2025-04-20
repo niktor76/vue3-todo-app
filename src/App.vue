@@ -194,6 +194,9 @@ const importTasks = async (event) => {
         isEditing: false,
       }
     })
+
+    // Reset the input value
+    event.target.value = ''
   } catch (err) {
     console.error(err)
   }
