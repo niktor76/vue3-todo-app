@@ -6,12 +6,21 @@
   color: var(--color-text);
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .done {
   text-decoration: line-through;
 }
 
 button {
   color: var(--button-text);
+  background-color: var(--button-bg);
+  border: 1px solid;
+  border-radius: 3px;
   padding: 5px;
   margin: 2px;
 }
@@ -19,10 +28,6 @@ button {
 .dark-mode {
   color: rgb(213, 194, 158);
   background-color: var(--color-bg);
-
-  button {
-    background-color: var(--button-bg);
-  }
 
   input {
     background-color: var(--input-bg);
