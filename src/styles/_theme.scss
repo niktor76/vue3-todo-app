@@ -1,0 +1,75 @@
+/* ==========================================================================
+   🎨 THEME VARIABLES — design tokens for your Vue app
+   ========================================================================== */
+
+/* COLOR PALETTE */
+:root {
+  // Base colors
+  --color-bg: #ffffff;
+  --color-surface: #f4f4f4;
+  --color-border: #ccc;
+
+  --color-text: #111111;
+  --color-text-muted: #888888;
+  --color-heading: #000;
+
+  // Brand
+  --color-primary: #cee645;
+  --color-primary-hover: #bcd437;
+  --color-secondary: #5e9eff;
+
+  // Feedback
+  --color-success: #28a745;
+  --color-error: #e74c3c;
+  --color-warning: #f39c12;
+  --color-info: #3498db;
+
+  // UI Elements
+  --button-bg: var(--color-primary);
+  --button-text: #000;
+  --input-bg: #f0f0f0;
+  --input-border: var(--color-border);
+  --modal-bg: var(--color-surface);
+}
+
+/* TYPOGRAPHY */
+:root {
+  --font-family-base: 'Georgia', 'Times New Roman', serif;
+  --font-size-base: 16px;
+  --font-size-sm: 14px;
+  --font-size-lg: 18px;
+  --line-height: 1.6;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+}
+
+/* SPACING */
+:root {
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+}
+
+/* LAYOUT */
+:root {
+  --container-width: 1200px;
+  --header-height: 60px;
+  --footer-height: 40px;
+  --z-index-header: 1000;
+  --z-index-modal: 2000;
+  --z-index-toast: 3000;
+}
+
+/* DARK MODE OVERRIDES */
+.dark-mode {
+  --color-bg: #1f4141;
+  --color-surface: #3a5e5e;
+  --color-text: #dfdfdf;
+  --color-border: #456;
+
+  --input-bg: #b8f0b0;
+  --button-bg: #cee645;
+  --button-text: rgb(90, 90, 90);
+}

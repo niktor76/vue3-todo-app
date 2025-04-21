@@ -1,54 +1,56 @@
 <template>
-  <div>
-    <label for="darkmode-switch">Dark mode</label>
-    <input v-model="darkMode" type="checkbox" name="darkmode" id="darkmode-switch" />
-    <h1>Todo App</h1>
-    <TaskInput v-model="newTaskText" @add-task="addTask" />
-
-    <div aria-labelledby="filter-heading">
-      <h2 id="filter-heading">Task filter</h2>
-      <button :class="{ 'is-selected': filterState === 'all' }" @click="filterState = 'all'">
-        All ({{ tasks.length }})
+  <Layout>
+    <div>
+      <label for="darkmode-switch">Dark mode</label>
+      <input v-model="darkMode" type="checkbox" name="darkmode" id="darkmode-switch" />
+      <TaskInput v-model="newTaskText" @add-task="addTask" />
+      <div aria-labelledby="filter-heading">
+        <h2 id="filter-heading">Task filter</h2>
+        <button :class="{ 'is-selected': filterState === 'all' }" @click="filterState = 'all'">
+          All ({{ tasks.length }})
+        </button>
+        <button
+          :class="{ 'is-selected': filterState === 'active' }"
+          @click="filterState = 'active'"
+        >
+          Active ({{ tasks.filter((task) => !task.done).length }})
+        </button>
+        <button
+          :class="{ 'is-selected': filterState === 'completed' }"
+          @click="filterState = 'completed'"
+        >
+          Completed ({{ tasks.filter((task) => task.done).length }})
+        </button>
+      </div>
+      <section aria-labelledby="task-list-heading">
+        <h2 id="task-list-heading">Task List</h2>
+        <ul>
+          <li v-for="task in filteredTasks" :key="task.id">
+            <TaskItem
+              :task="task"
+              @done="done"
+              @update-text="updateText"
+              @remove-task="removeTask"
+              @edit-start="startEditingTaskLabel"
+              @edit-stop="stopEditingTaskLabel"
+            />
+          </li>
+        </ul>
+      </section>
+      <button v-if="tasks.some((task) => task.done)" @click="clearCompleted()">
+        Clear completed tasks
       </button>
-      <button :class="{ 'is-selected': filterState === 'active' }" @click="filterState = 'active'">
-        Active ({{ tasks.filter((task) => !task.done).length }})
-      </button>
-      <button
-        :class="{ 'is-selected': filterState === 'completed' }"
-        @click="filterState = 'completed'"
-      >
-        Completed ({{ tasks.filter((task) => task.done).length }})
-      </button>
+      <button class="file-operations" @click="isFilesModalVisible = true">File Operations</button>
     </div>
-
-    <section aria-labelledby="task-list-heading">
-      <h2 id="task-list-heading">Task List</h2>
-      <ul>
-        <li v-for="task in filteredTasks" :key="task.id">
-          <TaskItem
-            :task="task"
-            @done="done"
-            @update-text="updateText"
-            @remove-task="removeTask"
-            @edit-start="startEditingTaskLabel"
-            @edit-stop="stopEditingTaskLabel"
-          />
-        </li>
-      </ul>
-    </section>
-    <button v-if="tasks.some((task) => task.done)" @click="clearCompleted()">
-      Clear completed tasks
-    </button>
-  </div>
-  <button class="file-operations" @click="isFilesModalVisible = true">File Operations</button>
-  <FileModal
-    v-if="isFilesModalVisible"
-    @export-tasks="exportTasks"
-    @import-tasks="importTasks"
-    @hide-modal="isFilesModalVisible = false"
-    :isVisible="isFilesModalVisible"
-  />
-  <div class="sr-only" aria-live="polite">{{ announcement }}</div>
+    <FileModal
+      v-if="isFilesModalVisible"
+      @export-tasks="exportTasks"
+      @import-tasks="importTasks"
+      @hide-modal="isFilesModalVisible = false"
+      :isVisible="isFilesModalVisible"
+    />
+    <div class="sr-only" aria-live="polite">{{ announcement }}</div>
+  </Layout>
 </template>
 
 <script setup>
@@ -63,6 +65,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import TaskItem from './components/TaskItem.vue'
 import TaskInput from './components/TaskInput.vue'
 import FileModal from './components/FileModal.vue'
+import Layout from './layouts/Layout.vue'
 
 const tasks = ref([])
 const newTaskText = ref('')
@@ -220,31 +223,4 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss">
-* {
-  font-family: Georgia, 'Times New Roman', Times, serif;
-}
-
-.done {
-  text-decoration: line-through;
-}
-
-.dark-mode {
-  color: rgb(213, 194, 158);
-  background-color: rgb(31, 65, 65);
-
-  button {
-    background-color: #cee645;
-    padding: 5px;
-    margin: 2px;
-  }
-  input {
-    background-color: #b8f0b0;
-  }
-
-  .is-selected {
-    color: white;
-    background-color: blue;
-  }
-}
-</style>
+<style lang="scss"></style>

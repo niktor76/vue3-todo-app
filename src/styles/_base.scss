@@ -1,0 +1,35 @@
+@import './theme';
+
+* {
+  font-family: var(--font-family-base);
+  // font-size: var(--font-size-base);
+  color: var(--color-text);
+}
+
+.done {
+  text-decoration: line-through;
+}
+
+button {
+  color: var(--button-text);
+  padding: 5px;
+  margin: 2px;
+}
+
+.dark-mode {
+  color: rgb(213, 194, 158);
+  background-color: var(--color-bg);
+
+  button {
+    background-color: var(--button-bg);
+  }
+
+  input {
+    background-color: var(--input-bg);
+  }
+
+  .is-selected {
+    color: white;
+    background-color: blue;
+  }
+}
